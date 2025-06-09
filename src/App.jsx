@@ -10,6 +10,8 @@ import CadastroVoluntario from "./pages/CadastroVoluntario";
 import Chamada from "./pages/Chamada";
 import RelatorioAlunos from "./pages/RelatorioAlunos";
 import RelatorioDoacoes from "./pages/RelatorioDoacoes";
+import CadastroPai from "./pages/CadastroPai";
+import ListarAlunos from "./pages/ListarAlunos";
 
 export default function App() {
   return (
@@ -26,6 +28,8 @@ export default function App() {
           <Route path="chamada" element={<Chamada />} />
           <Route path="relatorio-alunos" element={<RelatorioAlunos />} />
           <Route path="relatorio-doacoes" element={<RelatorioDoacoes />} />
+          <Route path="/cadastro-pai" element={<CadastroPai />} />
+          <Route path="/listar-alunos" element={<ListarAlunos />} />
         </Route>
       </Routes>
     </Router>

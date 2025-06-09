@@ -24,6 +24,8 @@ export default function Layout() {
           <Link to="/chamada">Chamada</Link>
           <Link to="/relatorio-doacoes">Relatório Doações</Link>
           <Link to="/relatorio-alunos">Relatório Alunos</Link>
+          <Link to="/cadastro-pai">Cadastro Pai</Link>
+          <Link to="/listar-alunos">Listar Alunos</Link>
         </nav>
 
         <button className="logout-button" onClick={handleLogout}>

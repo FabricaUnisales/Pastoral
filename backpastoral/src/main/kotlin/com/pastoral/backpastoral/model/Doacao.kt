@@ -29,5 +29,14 @@ data class Doacao(
 
     @Column(nullable = false)
     @NotNull(message = "Data da doação é obrigatória")
-    val dataDoacao: LocalDate
+    val dataDoacao: LocalDate,
+
+    @Column(columnDefinition = "LONGBLOB")
+    val arquivo: ByteArray? = null,
+
+    @Column
+    val nomeArquivo: String? = null,
+
+    @Column
+    val tipoArquivo: String? = null
 ) 

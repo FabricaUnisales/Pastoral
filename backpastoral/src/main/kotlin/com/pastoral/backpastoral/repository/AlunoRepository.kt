@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface AlunoRepository : JpaRepository<Aluno, Long> {
-    fun findByPaiId(paiId: Long): List<Aluno>
+    fun existsByCodigoCarteirinha(codigoCarteirinha: String): Boolean
 } 

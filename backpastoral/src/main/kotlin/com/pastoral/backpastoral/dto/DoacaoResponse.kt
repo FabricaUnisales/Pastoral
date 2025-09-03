@@ -9,5 +9,7 @@ data class DoacaoResponse(
     val tipo: String,
     val descricao: String,
     val valor: BigDecimal?,
-    val dataDoacao: LocalDate
+    val dataDoacao: LocalDate,
+    val nomeArquivo: String?,
+    val tipoArquivo: String?
 ) 

@@ -9,6 +9,7 @@ data class AlunoResponse(
     val nascimento: LocalDate,
     val escola: String,
     val serie: String,
-    val paiNome: String?,
-    val paiId: Long?
+    val nomeMae: String?,
+    val nomePai: String?,
+    val codigoCarteirinha: String
 ) 

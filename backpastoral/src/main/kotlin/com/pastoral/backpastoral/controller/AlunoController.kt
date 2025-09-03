@@ -44,29 +44,17 @@ class AlunoController(
         }
     }
 
-    @GetMapping("/pai/{paiId}")
-    @Operation(summary = "Listar alunos por pai", description = "Retorna uma lista de alunos de um responsável específico")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Lista de alunos retornada com sucesso")
-    ])
-    fun listarPorPai(@Parameter(description = "ID do pai/responsável") @PathVariable paiId: Long): ResponseEntity<List<AlunoResponse>> {
-        val alunos = alunoService.listarPorPai(paiId)
-        return ResponseEntity.ok(alunos)
-    }
+
 
     @PostMapping
     @Operation(summary = "Criar novo aluno", description = "Cadastra um novo aluno no sistema")
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "Aluno criado com sucesso"),
-        ApiResponse(responseCode = "400", description = "Dados inválidos ou pai não encontrado")
+        ApiResponse(responseCode = "400", description = "Dados inválidos")
     ])
     fun criar(@Valid @RequestBody alunoRequest: AlunoRequest): ResponseEntity<AlunoResponse> {
         val aluno = alunoService.salvar(alunoRequest)
-        return if (aluno != null) {
-            ResponseEntity.ok(aluno)
-        } else {
-            ResponseEntity.badRequest().build()
-        }
+        return ResponseEntity.ok(aluno)
     }
 
     @PutMapping("/{id}")

@@ -7,8 +7,9 @@ const links = [
   { to: "/cadastro-voluntario", label: "Cadastro Voluntário" },
   { to: "/cadastro-doacao", label: "Cadastro Doação" },
   { to: "/cadastro-aluno", label: "Cadastro Aluno" },
-  { to: "/cadastro-pai", label: "Cadastro Pai" },
+
   { to: "/listar-alunos", label: "Listar Alunos" },
+  { to: "/carteirinhas", label: "Carteirinhas" },
   { to: "/chamada", label: "Chamada" },
   { to: "/relatorio-doacoes", label: "Relatório Doações" },
   { to: "/relatorio-alunos", label: "Relatório Alunos" },

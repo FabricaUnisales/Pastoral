@@ -53,16 +53,16 @@ export default function RelatorioAlunos() {
 
   if (carregando) {
     return (
-      <div className="p-4 bg-white min-h-screen text-blue-900">
+      <div className="p-4 bg-white text-blue-900">
         <h2 className="text-lg font-bold mb-4">Relatório de Alunos</h2>
-        <div className="text-center py-8">Carregando...</div>
+        <div className="text-center py-4">Carregando...</div>
       </div>
     );
   }
 
   if (erro) {
     return (
-      <div className="p-4 bg-white min-h-screen text-blue-900">
+      <div className="p-4 bg-white text-blue-900">
         <h2 className="text-lg font-bold mb-4">Relatório de Alunos</h2>
         <div className="bg-red-100 text-red-800 p-3 rounded">{erro}</div>
       </div>
@@ -72,10 +72,10 @@ export default function RelatorioAlunos() {
   const estatisticas = calcularEstatisticas();
 
   return (
-    <div className="p-4 bg-white min-h-screen text-blue-900">
+    <div className="p-4 bg-white text-blue-900">
       <h2 className="text-lg font-bold mb-4">Relatório de Alunos</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
         <div className="bg-blue-100 p-4 rounded-lg">
           <h3 className="font-bold text-lg">{estatisticas.total}</h3>
           <p className="text-sm">Total de Alunos</p>
@@ -97,7 +97,7 @@ export default function RelatorioAlunos() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <h3 className="font-bold mb-3">Alunos por Escola</h3>
           <div className="bg-gray-50 p-4 rounded">

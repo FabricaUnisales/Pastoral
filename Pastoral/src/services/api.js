@@ -10,19 +10,13 @@ const api = axios.create({
 export const alunoService = {
   listarTodos: () => api.get('/alunos'),
   buscarPorId: (id) => api.get(`/alunos/${id}`),
-  listarPorPai: (paiId) => api.get(`/alunos/pai/${paiId}`),
+
   criar: (dados) => api.post('/alunos', dados),
   atualizar: (id, dados) => api.put(`/alunos/${id}`, dados),
   excluir: (id) => api.delete(`/alunos/${id}`),
 };
 
-export const paiService = {
-  listarTodos: () => api.get('/pais'),
-  buscarPorId: (id) => api.get(`/pais/${id}`),
-  criar: (dados) => api.post('/pais', dados),
-  atualizar: (id, dados) => api.put(`/pais/${id}`, dados),
-  excluir: (id) => api.delete(`/pais/${id}`),
-};
+
 
 export const voluntarioService = {
   listarTodos: () => api.get('/voluntarios'),
@@ -36,8 +30,23 @@ export const doacaoService = {
   listarTodos: () => api.get('/doacoes'),
   buscarPorId: (id) => api.get(`/doacoes/${id}`),
   criar: (dados) => api.post('/doacoes', dados),
+  criarComArquivo: (formData) => api.post('/doacoes/com-arquivo', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }),
   atualizar: (id, dados) => api.put(`/doacoes/${id}`, dados),
   excluir: (id) => api.delete(`/doacoes/${id}`),
+};
+
+export const chamadaService = {
+  listarTodas: () => api.get('/chamadas'),
+  buscarPorId: (id) => api.get(`/chamadas/${id}`),
+  buscarPorData: (data) => api.get(`/chamadas/data/${data}`),
+  listarPorPeriodo: (dataInicio, dataFim) => api.get(`/chamadas/periodo?dataInicio=${dataInicio}&dataFim=${dataFim}`),
+  criar: (dados) => api.post('/chamadas', dados),
+  atualizar: (id, dados) => api.put(`/chamadas/${id}`, dados),
+  excluir: (id) => api.delete(`/chamadas/${id}`),
 };
 
 export default api; 

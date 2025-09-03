@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { alunoService, paiService } from "../services/api";
+import React, { useState } from "react";
+import { alunoService } from "../services/api";
+import Carteirinha from "../components/Carteirinha";
 
 export default function CadastroAluno() {
   const [formulario, setFormulario] = useState({
@@ -8,24 +9,13 @@ export default function CadastroAluno() {
     nascimento: "",
     escola: "",
     serie: "",
-    paiId: ""
+    nomeMae: "",
+    nomePai: ""
   });
-  const [pais, setPais] = useState([]);
   const [mensagem, setMensagem] = useState("");
   const [carregando, setCarregando] = useState(false);
-
-  useEffect(() => {
-    carregarPais();
-  }, []);
-
-  const carregarPais = async () => {
-    try {
-      const resposta = await paiService.listarTodos();
-      setPais(resposta.data);
-    } catch (erro) {
-      setMensagem("Erro ao carregar responsáveis");
-    }
-  };
+  const [alunoRecemCadastrado, setAlunoRecemCadastrado] = useState(null);
+  const [mostrarCarteirinha, setMostrarCarteirinha] = useState(false);
 
   const lidarComMudanca = (campo, valor) => {
     setFormulario(prev => ({
@@ -40,15 +30,39 @@ export default function CadastroAluno() {
     setMensagem("");
 
     try {
-      await alunoService.criar(formulario);
+      // Criar objeto com apenas os campos não vazios
+      const dadosParaEnvio = {
+        nome: formulario.nome,
+        genero: formulario.genero,
+        nascimento: formulario.nascimento,
+        escola: formulario.escola,
+        serie: formulario.serie
+      };
+
+      // Adicionar campos opcionais apenas se não estiverem vazios
+      if (formulario.nomeMae && formulario.nomeMae.trim()) {
+        dadosParaEnvio.nomeMae = formulario.nomeMae.trim();
+      }
+      
+      if (formulario.nomePai && formulario.nomePai.trim()) {
+        dadosParaEnvio.nomePai = formulario.nomePai.trim();
+      }
+
+      const resposta = await alunoService.criar(dadosParaEnvio);
+      const alunoSalvo = resposta.data;
+      
       setMensagem("Aluno cadastrado com sucesso!");
+      setAlunoRecemCadastrado(alunoSalvo);
+      setMostrarCarteirinha(true);
+      
       setFormulario({
         nome: "",
         genero: "",
         nascimento: "",
         escola: "",
         serie: "",
-        paiId: ""
+        nomeMae: "",
+        nomePai: ""
       });
     } catch (erro) {
       setMensagem("Erro ao cadastrar aluno");
@@ -70,7 +84,7 @@ export default function CadastroAluno() {
           <div>
             <input
               type="text"
-              placeholder="Nome"
+              placeholder="Nome do aluno"
               value={formulario.nome}
               onChange={(e) => lidarComMudanca("nome", e.target.value)}
               className="w-full border border-blue-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 bg-blue-50"
@@ -119,20 +133,24 @@ export default function CadastroAluno() {
             />
           </div>
           <div>
-            <select
-              value={formulario.paiId}
-              onChange={(e) => lidarComMudanca("paiId", e.target.value)}
+            <input
+              type="text"
+              placeholder="Nome da mãe (opcional)"
+              value={formulario.nomeMae}
+              onChange={(e) => lidarComMudanca("nomeMae", e.target.value)}
               className="w-full border border-blue-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 bg-blue-50"
-              required
-            >
-              <option value="">Selecione o responsável</option>
-              {pais.map(pai => (
-                <option key={pai.id} value={pai.id}>
-                  {pai.nome} - {pai.telefone}
-                </option>
-              ))}
-            </select>
+            />
           </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Nome do pai (opcional)"
+              value={formulario.nomePai}
+              onChange={(e) => lidarComMudanca("nomePai", e.target.value)}
+              className="w-full border border-blue-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 bg-blue-50"
+            />
+          </div>
+
           <button
             type="submit"
             disabled={carregando}
@@ -142,6 +160,14 @@ export default function CadastroAluno() {
           </button>
         </form>
       </div>
+      
+      {/* Modal da Carteirinha */}
+      {mostrarCarteirinha && alunoRecemCadastrado && (
+        <Carteirinha 
+          aluno={alunoRecemCadastrado} 
+          onClose={() => setMostrarCarteirinha(false)} 
+        />
+      )}
     </div>
   );
 }

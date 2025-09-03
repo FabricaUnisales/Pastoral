@@ -21,7 +21,9 @@ class DoacaoService(
                 tipo = doacao.tipo,
                 descricao = doacao.descricao,
                 valor = doacao.valor,
-                dataDoacao = doacao.dataDoacao
+                dataDoacao = doacao.dataDoacao,
+                nomeArquivo = doacao.nomeArquivo,
+                tipoArquivo = doacao.tipoArquivo
             )
         }
     }
@@ -34,7 +36,9 @@ class DoacaoService(
             tipo = doacao.tipo,
             descricao = doacao.descricao,
             valor = doacao.valor,
-            dataDoacao = doacao.dataDoacao
+            dataDoacao = doacao.dataDoacao,
+            nomeArquivo = doacao.nomeArquivo,
+            tipoArquivo = doacao.tipoArquivo
         )
     }
 
@@ -44,7 +48,10 @@ class DoacaoService(
             tipo = doacaoRequest.tipo,
             descricao = doacaoRequest.descricao,
             valor = doacaoRequest.valor,
-            dataDoacao = doacaoRequest.dataDoacao
+            dataDoacao = doacaoRequest.dataDoacao,
+            arquivo = doacaoRequest.arquivo,
+            nomeArquivo = doacaoRequest.nomeArquivo,
+            tipoArquivo = doacaoRequest.tipoArquivo
         )
 
         val doacaoSalva = doacaoRepository.save(doacao)
@@ -55,7 +62,9 @@ class DoacaoService(
             tipo = doacaoSalva.tipo,
             descricao = doacaoSalva.descricao,
             valor = doacaoSalva.valor,
-            dataDoacao = doacaoSalva.dataDoacao
+            dataDoacao = doacaoSalva.dataDoacao,
+            nomeArquivo = doacaoSalva.nomeArquivo,
+            tipoArquivo = doacaoSalva.tipoArquivo
         )
     }
 
@@ -68,7 +77,10 @@ class DoacaoService(
             tipo = doacaoRequest.tipo,
             descricao = doacaoRequest.descricao,
             valor = doacaoRequest.valor,
-            dataDoacao = doacaoRequest.dataDoacao
+            dataDoacao = doacaoRequest.dataDoacao,
+            arquivo = doacaoRequest.arquivo,
+            nomeArquivo = doacaoRequest.nomeArquivo,
+            tipoArquivo = doacaoRequest.tipoArquivo
         )
 
         val doacaoAtualizada = doacaoRepository.save(doacao)
@@ -79,7 +91,9 @@ class DoacaoService(
             tipo = doacaoAtualizada.tipo,
             descricao = doacaoAtualizada.descricao,
             valor = doacaoAtualizada.valor,
-            dataDoacao = doacaoAtualizada.dataDoacao
+            dataDoacao = doacaoAtualizada.dataDoacao,
+            nomeArquivo = doacaoAtualizada.nomeArquivo,
+            tipoArquivo = doacaoAtualizada.tipoArquivo
         )
     }
 
@@ -91,7 +105,9 @@ class DoacaoService(
                 tipo = doacao.tipo,
                 descricao = doacao.descricao,
                 valor = doacao.valor,
-                dataDoacao = doacao.dataDoacao
+                dataDoacao = doacao.dataDoacao,
+                nomeArquivo = doacao.nomeArquivo,
+                tipoArquivo = doacao.tipoArquivo
             )
         }
     }
@@ -104,7 +120,9 @@ class DoacaoService(
                 tipo = doacao.tipo,
                 descricao = doacao.descricao,
                 valor = doacao.valor,
-                dataDoacao = doacao.dataDoacao
+                dataDoacao = doacao.dataDoacao,
+                nomeArquivo = doacao.nomeArquivo,
+                tipoArquivo = doacao.tipoArquivo
             )
         }
     }
@@ -116,5 +134,9 @@ class DoacaoService(
         } else {
             false
         }
+    }
+
+    fun buscarDoacaoCompleta(id: Long): Doacao? {
+        return doacaoRepository.findById(id).orElse(null)
     }
 } 

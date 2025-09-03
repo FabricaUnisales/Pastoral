@@ -32,8 +32,12 @@ data class Aluno(
     @NotBlank(message = "Série é obrigatória")
     val serie: String,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pai_id", nullable = true)
-    @JsonIgnore
-    val pai: Pai? = null
+    @Column(nullable = true)
+    val nomeMae: String? = null,
+
+    @Column(nullable = true)
+    val nomePai: String? = null,
+
+    @Column(nullable = false, unique = true)
+    val codigoCarteirinha: String
 ) 

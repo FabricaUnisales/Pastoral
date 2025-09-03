@@ -9,6 +9,7 @@ export default function CadastroDoacao() {
     valor: "",
     dataDoacao: ""
   });
+  const [arquivo, setArquivo] = useState(null);
   const [mensagem, setMensagem] = useState("");
   const [carregando, setCarregando] = useState(false);
 
@@ -25,12 +26,27 @@ export default function CadastroDoacao() {
     setMensagem("");
 
     try {
-      const dadosParaEnviar = {
-        ...formulario,
-        valor: formulario.valor ? parseFloat(formulario.valor) : null
-      };
+      if (arquivo) {
+        // Se tem arquivo, usar o endpoint com arquivo
+        const formData = new FormData();
+        formData.append('doador', formulario.doador);
+        formData.append('tipo', formulario.tipo);
+        formData.append('descricao', formulario.descricao);
+        formData.append('valor', formulario.valor || '');
+        formData.append('dataDoacao', formulario.dataDoacao);
+        formData.append('arquivo', arquivo);
+        
+        await doacaoService.criarComArquivo(formData);
+      } else {
+        // Se não tem arquivo, usar o endpoint normal
+        const dadosParaEnviar = {
+          ...formulario,
+          valor: formulario.valor ? parseFloat(formulario.valor) : null
+        };
+        
+        await doacaoService.criar(dadosParaEnviar);
+      }
       
-      await doacaoService.criar(dadosParaEnviar);
       setMensagem("Doação cadastrada com sucesso!");
       setFormulario({
         doador: "",
@@ -39,6 +55,7 @@ export default function CadastroDoacao() {
         valor: "",
         dataDoacao: ""
       });
+      setArquivo(null);
     } catch (erro) {
       setMensagem("Erro ao cadastrar doação");
     } finally {
@@ -110,6 +127,22 @@ export default function CadastroDoacao() {
               className="w-full border border-blue-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 bg-blue-50"
               required
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-blue-900 mb-2">
+              Arquivo de Comprovação (opcional)
+            </label>
+            <input
+              type="file"
+              onChange={(e) => setArquivo(e.target.files[0] || null)}
+              className="w-full border border-blue-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 bg-blue-50 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+            />
+            {arquivo && (
+              <p className="text-sm text-blue-600 mt-1">
+                Arquivo selecionado: {arquivo.name}
+              </p>
+            )}
           </div>
           <button
             type="submit"

@@ -2,6 +2,7 @@ package com.pastoral.backpastoral.controller
 
 import com.pastoral.backpastoral.dto.DoacaoRequest
 import com.pastoral.backpastoral.dto.DoacaoResponse
+import com.pastoral.backpastoral.dto.DoacaoComArquivoRequest
 import com.pastoral.backpastoral.service.DoacaoService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -77,6 +78,17 @@ class DoacaoController(
     ])
     fun criar(@Valid @RequestBody doacaoRequest: DoacaoRequest): ResponseEntity<DoacaoResponse> {
         val doacao = doacaoService.salvar(doacaoRequest)
+        return ResponseEntity.ok(doacao)
+    }
+
+    @PostMapping("/com-arquivo")
+    @Operation(summary = "Criar nova doação com arquivo", description = "Cadastra uma nova doação com arquivo de comprovação")
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "200", description = "Doação criada com sucesso"),
+        ApiResponse(responseCode = "400", description = "Dados inválidos")
+    ])
+    fun criarComArquivo(@ModelAttribute doacaoRequest: DoacaoComArquivoRequest): ResponseEntity<DoacaoResponse> {
+        val doacao = doacaoService.salvar(doacaoRequest.converterParaDoacaoRequest())
         return ResponseEntity.ok(doacao)
     }
 

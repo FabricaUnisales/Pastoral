@@ -4,13 +4,12 @@ import com.pastoral.backpastoral.dto.AlunoRequest
 import com.pastoral.backpastoral.dto.AlunoResponse
 import com.pastoral.backpastoral.model.Aluno
 import com.pastoral.backpastoral.repository.AlunoRepository
-import com.pastoral.backpastoral.repository.PaiRepository
 import org.springframework.stereotype.Service
+import kotlin.random.Random
 
 @Service
 class AlunoService(
-    private val alunoRepository: AlunoRepository,
-    private val paiRepository: PaiRepository
+    private val alunoRepository: AlunoRepository
 ) {
 
     fun listarTodos(): List<AlunoResponse> {
@@ -22,8 +21,9 @@ class AlunoService(
                 nascimento = aluno.nascimento,
                 escola = aluno.escola,
                 serie = aluno.serie,
-                paiNome = aluno.pai?.nome,
-                paiId = aluno.pai?.id
+                nomeMae = aluno.nomeMae,
+                nomePai = aluno.nomePai,
+                codigoCarteirinha = aluno.codigoCarteirinha
             )
         }
     }
@@ -37,17 +37,14 @@ class AlunoService(
             nascimento = aluno.nascimento,
             escola = aluno.escola,
             serie = aluno.serie,
-            paiNome = aluno.pai?.nome,
-            paiId = aluno.pai?.id
+            nomeMae = aluno.nomeMae,
+            nomePai = aluno.nomePai,
+            codigoCarteirinha = aluno.codigoCarteirinha
         )
     }
 
-    fun salvar(alunoRequest: AlunoRequest): AlunoResponse? {
-        val pai = if (alunoRequest.paiId != null && alunoRequest.paiId > 0) {
-            paiRepository.findById(alunoRequest.paiId).orElse(null) ?: return null
-        } else {
-            null
-        }
+    fun salvar(alunoRequest: AlunoRequest): AlunoResponse {
+        val codigoCarteirinha = gerarCodigoUnico()
         
         val aluno = Aluno(
             nome = alunoRequest.nome,
@@ -55,7 +52,9 @@ class AlunoService(
             nascimento = alunoRequest.nascimento,
             escola = alunoRequest.escola,
             serie = alunoRequest.serie,
-            pai = pai
+            nomeMae = alunoRequest.nomeMae,
+            nomePai = alunoRequest.nomePai,
+            codigoCarteirinha = codigoCarteirinha
         )
 
         val alunoSalvo = alunoRepository.save(aluno)
@@ -67,19 +66,14 @@ class AlunoService(
             nascimento = alunoSalvo.nascimento,
             escola = alunoSalvo.escola,
             serie = alunoSalvo.serie,
-            paiNome = alunoSalvo.pai?.nome,
-            paiId = alunoSalvo.pai?.id
+            nomeMae = alunoSalvo.nomeMae,
+            nomePai = alunoSalvo.nomePai,
+            codigoCarteirinha = alunoSalvo.codigoCarteirinha
         )
     }
 
     fun atualizar(id: Long, alunoRequest: AlunoRequest): AlunoResponse? {
-        if (!alunoRepository.existsById(id)) return null
-        
-        val pai = if (alunoRequest.paiId != null && alunoRequest.paiId > 0) {
-            paiRepository.findById(alunoRequest.paiId).orElse(null) ?: return null
-        } else {
-            null
-        }
+        val alunoExistente = alunoRepository.findById(id).orElse(null) ?: return null
         
         val aluno = Aluno(
             id = id,
@@ -88,7 +82,9 @@ class AlunoService(
             nascimento = alunoRequest.nascimento,
             escola = alunoRequest.escola,
             serie = alunoRequest.serie,
-            pai = pai
+            nomeMae = alunoRequest.nomeMae,
+            nomePai = alunoRequest.nomePai,
+            codigoCarteirinha = alunoExistente.codigoCarteirinha // Mantém o código existente
         )
 
         val alunoAtualizado = alunoRepository.save(aluno)
@@ -100,8 +96,9 @@ class AlunoService(
             nascimento = alunoAtualizado.nascimento,
             escola = alunoAtualizado.escola,
             serie = alunoAtualizado.serie,
-            paiNome = alunoAtualizado.pai?.nome,
-            paiId = alunoAtualizado.pai?.id
+            nomeMae = alunoAtualizado.nomeMae,
+            nomePai = alunoAtualizado.nomePai,
+            codigoCarteirinha = alunoAtualizado.codigoCarteirinha
         )
     }
 
@@ -114,18 +111,15 @@ class AlunoService(
         }
     }
 
-    fun listarPorPai(paiId: Long): List<AlunoResponse> {
-        return alunoRepository.findByPaiId(paiId).map { aluno ->
-            AlunoResponse(
-                id = aluno.id,
-                nome = aluno.nome,
-                genero = aluno.genero,
-                nascimento = aluno.nascimento,
-                escola = aluno.escola,
-                serie = aluno.serie,
-                paiNome = aluno.pai?.nome,
-                paiId = aluno.pai?.id
-            )
-        }
+    private fun gerarCodigoUnico(): String {
+        var codigo: String
+        do {
+            codigo = gerarCodigoAleatorio()
+        } while (alunoRepository.existsByCodigoCarteirinha(codigo))
+        return codigo
     }
-} 
+
+    private fun gerarCodigoAleatorio(): String {
+        return (1..10).map { Random.nextInt(0, 10) }.joinToString("")
+    }
+}

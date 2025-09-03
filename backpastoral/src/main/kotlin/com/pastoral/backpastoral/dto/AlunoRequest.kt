@@ -19,6 +19,8 @@ data class AlunoRequest(
     @NotBlank(message = "Série é obrigatória")
     val serie: String,
 
-    // Pode ser nulo se não tiver pai ainda
-    val paiId: Long? = null
+    // Campos opcionais para os nomes dos pais
+    val nomeMae: String? = null,
+    
+    val nomePai: String? = null
 ) 
